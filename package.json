@@ -18,6 +18,8 @@
   "dependencies": {
     "@fastify/awilix": "^3.2.0",
     "@fastify/error": "^3.4.1",
+    "@fastify/swagger": "^8",
+    "@fastify/swagger-ui": "^2",
     "@fastify/under-pressure": "^8.3.0",
     "@types/better-sqlite3": "^7.6.10",
     "@types/lodash": "^4.17.4",

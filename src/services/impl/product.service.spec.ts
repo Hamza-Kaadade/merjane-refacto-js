@@ -8,6 +8,8 @@ import {createDatabaseMock, cleanUp} from '../../utils/test-utils/database-tools
 import {ProductService} from './product.service.js';
 import {products, type Product} from '@/db/schema.js';
 import {type Database} from '@/db/type.js';
+import {NormalProduct} from '@/entities/normal-product.js';
+import {ProductRepository} from '@/repositories/product.repository.js';
 
 describe('ProductService Tests', () => {
 	let notificationServiceMock: DeepMockProxy<INotificationService>;
@@ -21,7 +23,7 @@ describe('ProductService Tests', () => {
 		notificationServiceMock = mockDeep<INotificationService>();
 		productService = new ProductService({
 			ns: notificationServiceMock,
-			db: databaseMock,
+			productRepository: new ProductRepository({db: databaseMock}),
 		});
 	});
 
@@ -45,7 +47,9 @@ describe('ProductService Tests', () => {
 		await databaseMock.insert(products).values(product);
 
 		// WHEN
-		await productService.notifyDelay(product.leadTime, product);
+		await productService.notifyDelay(new NormalProduct({
+			id: product.id, name: product.name, available: product.available, leadTime: product.leadTime,
+		}));
 
 		// THEN
 		expect(product.available).toBe(0);
